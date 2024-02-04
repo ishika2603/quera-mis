@@ -25,7 +25,11 @@ We riffed off the idea that if two training examples are identical, we don’t n
 
 We chose the example of 10,000 images of skin lesions and their diagnoses. There are 5 possible diagnoses including melanoma and benign keratosis legion. We chose this dataset because of how easy it is to get embeddings for images, although with time we can get almost any type of embedding. 
 
+<img src="./pictures/lesions.png" width="400" height="150">
+
 With these embeddings, we do Principal Component Analysis (PCA) to map the embedding vectors onto a 2-dimensional space. Points that are similar to each other will be close in the space. Then, we perform a transformation that takes the scatter to a lattice grid format. This is possible with multiple methods with various degrees of information loss. The method we explored was snapping onto the coordinate grid in a predefined way, but this loses data. The other method we could not explore due to resource constraints is a machine learning model that approximates the best grid spacing, angle of coordinates, and displacement from the origin. This is similar to the images from the following thread: (https://stackoverflow.com/questions/62946604/fitting-an-orthogonal-grid-to-noisy-coordinates). 
+
+<img src="./pictures/pca.png" width="200" height="200">
 
 Once we snap the points onto a lattice grid, we run MIS on the resulting graph using a neutral atom quantum computer. This gives us the maximum amount of clusters of data such that each cluster is sufficiently unique. The points selected from this algorithm are the training data that we will use on our algorithm, rather than the whole dataset. 
 
