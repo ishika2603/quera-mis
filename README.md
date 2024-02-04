@@ -5,15 +5,26 @@
 
 ### Theory
 *	Determine the parameters of a quantum algorithm for a neutral atom quantum computer to solve MIS with a unit-disk radius for connectivity larger than king’s.
-    + 
 
-
-A unit disk larger than King's implies modification to the Rb/a value, indicating the radius of the "disk" used to determine the connectivity between vertices. The specific machine, in this case Aquila, utilizes the rydberg_h class from bloqade, which is described as "Create a rydberg program with uniform detuning, amplitude, and phase". We create our variables delta and omega, repersenting detuning and amplitude respectively, combined with the graph coordinates, it can be run by the Aquila machine for solving IS/MIS problems. The delta value, precisely, is calculated based on the C6/Rb^6 variable, which determines the upper and lower bound. 
+A unit disk larger than King's implies modification to the Rb/a value, indicating the radius of the "disk" used to determine the connectivity between vertices. The specific machine, in this case Aquila, utilizes the rydberg_h class from bloqade, which is described as "Create a rydberg program with uniform detuning, amplitude, and phase". We create our variables delta and omega, reperesenting detuning and amplitude respectively, combined with the graph coordinates, it can be run by the Aquila machine for solving IS/MIS problems. The delta value, precisely, is calculated based on the C6/Rb^6 variable, which determines the upper and lower bound. 
 
 ### Programming
 * Perform simulations using [Bloqade](https://queracomputing.github.io/Bloqade.jl/dev/) on the largest possible system sizes you can. Optimize your protocol to maximize chance of measuring an MIS (optimization methods include [Nelder-Mead](https://queracomputing.github.io/Bloqade.jl/dev/tutorials/5.MIS/main/), [Bayesian methods](https://arxiv.org/pdf/2305.13365.pdf), counter-diabatic methods, or more)
     + Demonstrating higher probability of measuring MIS => more points!
     + Being able to simulate larger systems => more points!
+
+    As we started performing simulations, we quickly realised that scaling up the grid by even one more node per row and column would result in straining the capabilities for simulation on our hardware. We know that each qubit doubles the RAM requirement because qubit memory requirement scales up by 2^N. We found that 4x4 lattices wouldn't cross that computational threshold, but some 5x5 lattices did and certainly could not get any 6x6 to work. Varying the complexity from Rb/a = sqrt(2*sqrt(2)) to Rb/a ~ 3 also changes the computational intensity of simulation, as expected. 
+
+    We implemented two major protocols to optimize measuring an MIS:
+    1. The QAOA method: We found that this worked surprisingly well for more Rb/a ~ 3 cases. For example, the MIS was indentified correctly for the following graphs, and we also found that the optimization algorithm always had the MIS in the top 3 solutions.
+    <img src="./pictures/qaoa_result.png" width="400" height="350">
+    <img src="./pictures/qaoa_result_2.png" width="400" height="350">
+    This meant that we just needed to implement some postprocessing (an attempt of which you can find in the QAOA_experimental notebook). However, we had some object type issues when trying to utilize the Bloqade MIS methods. The general idea of the method was to loop through the top 10 options that had highest probabilities, then eliminate those that don't classify as an independent set and then find the maximum suggested independent set in that top 10. omega, delta and the time evolution was tuned to do the QAOA method - where omega was kept largely constant (long pulses) and delta needed to be kept close to 0, this ensured that the phase accumulated over time and played an important factor to the Hamiltonian. 
+
+    2. The Adiabatic method: For the adiabatic method, omega is set as the trapezoid shape, to keep area maximised under the curve. The variational optimization is for the delta function. The Nelder-Mead optimization is used to optimize for the shape of delta and also delta_max. It was slightly difficult to find initialized parameters that did not cause the optimization to fail (it would find it hard to minimize), and the proposed probability of getting and MSI seemed scarily low for some graphs.
+
+    
+
 *	Use [generic tensor networks](https://github.com/QuEraComputing/GenericTensorNetworks.jl), [Bloqade](https://queracomputing.github.io/Bloqade.jl/dev/), or your favorite method to estimate the (quantum and classical) annealing hardness parameters of the problem instances you found
     + Finding harder instances => more points!
 
