@@ -8,8 +8,7 @@
     + 
 
 
-*	Determine if the parameters above can fit a machine like [Aquila](https://www.quera.com/aquila). If so, generate problem instances on [Bloqade](https://queracomputing.github.io/Bloqade.jl/dev/) that could be run on it.
-    +	Extra points for finding if Rb/a=3 is realizable experimentally on Aquila, or what would be the best performant largest value.
+A unit disk larger than King's implies modification to the Rb/a value, indicating the radius of the "disk" used to determine the connectivity between vertices. The specific machine, in this case Aquila, utilizes the rydberg_h class from bloqade, which is described as "Create a rydberg program with uniform detuning, amplitude, and phase". We create our variables delta and omega, repersenting detuning and amplitude respectively, combined with the graph coordinates, it can be run by the Aquila machine for solving IS/MIS problems. The delta value, precisely, is calculated based on the C6/Rb^6 variable, which determines the upper and lower bound. 
 
 ### Programming
 * Perform simulations using [Bloqade](https://queracomputing.github.io/Bloqade.jl/dev/) on the largest possible system sizes you can. Optimize your protocol to maximize chance of measuring an MIS (optimization methods include [Nelder-Mead](https://queracomputing.github.io/Bloqade.jl/dev/tutorials/5.MIS/main/), [Bayesian methods](https://arxiv.org/pdf/2305.13365.pdf), counter-diabatic methods, or more)
