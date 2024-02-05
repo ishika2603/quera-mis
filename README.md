@@ -1,5 +1,5 @@
 # MIT iquHACK QuEra Challenge - Plancktons!!!
-
+### (First Place Winner)
 [Presentation Slides](https://docs.google.com/presentation/d/10n9njLF_h0AUi2PBZi9EJYwLfpbKsBRMFqhwXGXCmdE/edit?usp=sharing)
 
 ### Theory
